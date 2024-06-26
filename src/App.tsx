@@ -42,7 +42,7 @@ export default function App() {
         const currWordEl = activeWordRef?.current!;
         if (currWordEl) {
             currWordEl.children[idx + 1].classList.add(
-                currWord[idx] !== typedWord[idx] ? "wrong" : "right"
+                currWord.toLowerCase()[idx] !== typedWord.toLowerCase()[idx] ? "wrong" : "right"
             );
         }
     }, [currWord, typedWord, activeWordRef]);

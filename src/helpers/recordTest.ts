@@ -67,9 +67,10 @@ export const recordTest = (key: string, ctrlKey: boolean) => {
             break;
         case " ":
             if (typedWord === "") return;
-            currWordEl.classList.add(
-                typedWord !== currWord ? "wrong" : "right"
-            );
+            // Comparaison en ignorant la casse
+            const isCorrect = typedWord.toLowerCase() === currWord.toLowerCase();
+            console.log("isCorrect", isCorrect);
+            currWordEl.classList.add(isCorrect ? "right" : "wrong");
             dispatch(appendTypedHistory());
             break;
         case "Backspace":

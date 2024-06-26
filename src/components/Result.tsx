@@ -11,7 +11,7 @@ export default function Result() {
     const spaces = wordList.indexOf(currWord);
     let correctChars = 0;
     const result = typedHistory.map(
-        (typedWord, idx) => typedWord === wordList[idx]
+        (typedWord, idx) => typedWord.toLowerCase() === wordList[idx].toLowerCase()
     );
     result.forEach((r, idx) => {
         if (r) correctChars += wordList[idx].length;
