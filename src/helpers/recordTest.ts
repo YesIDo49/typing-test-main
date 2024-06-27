@@ -58,6 +58,7 @@ export const recordTest = (key: string, ctrlKey: boolean) => {
     const caret = caretRef?.current!;
     caret.classList.remove("blink");
     setTimeout(() => caret.classList.add("blink"), 500);
+
     switch (key) {
         case "Tab":
             if (timer !== timeLimit || timerId) {
@@ -69,15 +70,35 @@ export const recordTest = (key: string, ctrlKey: boolean) => {
             if (typedWord === "") return;
             // Comparaison en ignorant la casse
             const isCorrect = typedWord.toLowerCase() === currWord.toLowerCase();
-            console.log("isCorrect", isCorrect);
             currWordEl.classList.add(isCorrect ? "right" : "wrong");
             dispatch(appendTypedHistory());
+
+            if (isCorrect) {
+                // Valide le mot et ne peut pas revenir en arrière
+                dispatch(setTypedWord(""));
+            }
             break;
         case "Backspace":
             handleBackspace(ctrlKey);
             break;
         default:
-            dispatch(setChar(typedWord + key));
+            // If the next character is an expected space
+            if (currWord[typedWord.length] === ' ') {
+                if (key === ' ') {
+                    dispatch(setChar(typedWord + key));
+                    currWordEl.classList.add("right");
+                } else {
+                    currWordEl.classList.add("wrong");
+                }
+            } else {
+                dispatch(setChar(typedWord + key));
+                const isCorrect = (typedWord + key).toLowerCase() === currWord.toLowerCase();
+                if (isCorrect) {
+                    // Auto-compléter l'espace et passer au mot suivant*
+                    // console.log('skip space');
+                    dispatch(appendTypedHistory()); // Pour ajouter l'espace vide
+                }
+            }
             break;
     }
 };
